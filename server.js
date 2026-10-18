@@ -30,11 +30,13 @@ const publicFiles = {
   "/index.html": "index.html",
   "/admin": "index.html",
   "/admin/": "index.html",
+  "/admin/remote-overview": "index.html",
   "/styles.css": "styles.css",
   "/styles-settings.css": "styles-settings.css",
   "/styles-auth.css": "styles-auth.css",
   "/styles-runtime.css": "styles-runtime.css",
   "/styles-course-details.css": "styles-course-details.css",
+  "/styles-admin-overview.css": "styles-admin-overview.css",
   "/app.js": "app.js",
   "/training-matcher.js": "training-matcher.js",
   "/certificate-parser.js": "certificate-parser.js"

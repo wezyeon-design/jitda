@@ -14,6 +14,7 @@ let selectedFile = null;
 let extractedTrainings = [];
 let matchedTrainings = [];
 let activeAdminTab = "status";
+let adminSubview = "matrix";
 let toastTimer;
 let drawing = false;
 let hasSignature = false;
@@ -132,12 +133,14 @@ async function enterAccount(user) {
   $("#onsite-person").textContent = `${profile.department} · ${profile.fullName} 선생님`;
   $("#onsite-today").textContent = new Intl.DateTimeFormat("ko-KR", { year: "numeric", month: "long", day: "numeric" }).format(new Date());
   await refreshRecords();
-  const target = location.pathname === "/admin" && profile.role === "admin" ? "admin" : "home";
-  if (location.pathname === "/admin" && profile.role !== "admin") {
+  const isAdminPath = location.pathname.startsWith("/admin");
+  const target = isAdminPath && profile.role === "admin" ? "admin" : "home";
+  if (isAdminPath && profile.role !== "admin") {
     history.replaceState({}, "", "/");
     showToast("관리자 계정으로만 들어갈 수 있어요.");
   }
   showPage(target, false);
+  if (target === "admin") setAdminSubview(location.pathname === "/admin/remote-overview" ? "overview" : "matrix", false);
 }
 
 function showPage(name, updateAddress = true) {
@@ -156,6 +159,25 @@ function showPage(name, updateAddress = true) {
   }
   document.body.classList.toggle("admin-mode", name === "admin");
   if (name === "admin") renderAdmin();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function setAdminSubview(view, updateAddress = true) {
+  if (profile?.role !== "admin") return;
+  adminSubview = view;
+  const showingSummary = view === "overview";
+  $("#remote-summary-content").hidden = !showingSummary;
+  $("#remote-summary-open").hidden = showingSummary;
+  $("#admin-controls").hidden = showingSummary;
+  $("#admin-stats").hidden = showingSummary;
+  $("#status-content").hidden = showingSummary || activeAdminTab !== "status";
+  $("#onsite-content").hidden = showingSummary || activeAdminTab !== "onsite";
+  $("#files-content").hidden = showingSummary || activeAdminTab !== "files";
+  $("#individual-content").hidden = showingSummary || activeAdminTab !== "individual";
+  $("#users-content").hidden = showingSummary || activeAdminTab !== "users";
+  if (showingSummary) renderCourseOverview(getSchoolStaff(), completedKeys());
+  else renderAdmin();
+  if (updateAddress) history.pushState({}, "", showingSummary ? "/admin/remote-overview" : "/admin");
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
@@ -242,10 +264,15 @@ $("#setup-recheck").addEventListener("click", loadSession);
 
 $$('[data-method]').forEach((button) => button.addEventListener("click", () => openSubmission(button.dataset.method)));
 $$('[data-back]').forEach((button) => button.addEventListener("click", () => showPage("home")));
+$("#admin-department").addEventListener("change", renderAdmin);
+$("#remote-summary-open").addEventListener("click", () => setAdminSubview("overview"));
+$("#remote-summary-back").addEventListener("click", () => setAdminSubview("matrix"));
 window.addEventListener("popstate", () => {
   if (!profile) return;
-  if (location.pathname === "/admin" && profile.role === "admin") showPage("admin", false);
-  else showPage("home", false);
+  if (location.pathname.startsWith("/admin") && profile.role === "admin") {
+    showPage("admin", false);
+    setAdminSubview(location.pathname === "/admin/remote-overview" ? "overview" : "matrix", false);
+  } else showPage("home", false);
 });
 
 $("#choose-file").addEventListener("click", () => $("#certificate-file").click());
