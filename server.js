@@ -42,7 +42,10 @@ const publicFiles = {
   "/certificate-parser.js": "certificate-parser.js"
 };
 for (const [route, filename] of Object.entries(publicFiles)) {
-  app.get(route, (_req, res) => res.sendFile(path.join(__dirname, filename)));
+  app.get(route, (_req, res) => {
+    res.setHeader("Cache-Control", "no-store");
+    res.sendFile(path.join(__dirname, filename));
+  });
 }
 app.get("/__preview-bridge.js", (_req, res) => {
   const bridge = path.join(__dirname, "__preview-bridge.js");

@@ -264,7 +264,6 @@ $("#setup-recheck").addEventListener("click", loadSession);
 
 $$('[data-method]').forEach((button) => button.addEventListener("click", () => openSubmission(button.dataset.method)));
 $$('[data-back]').forEach((button) => button.addEventListener("click", () => showPage("home")));
-$("#admin-department").addEventListener("change", renderAdmin);
 $("#remote-summary-back").addEventListener("click", () => setAdminSubview("matrix"));
 window.addEventListener("popstate", () => {
   if (!profile) return;
