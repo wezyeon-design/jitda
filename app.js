@@ -436,8 +436,23 @@ function renderCourseOverview(schoolStaff, completed) {
   $("#course-overview").innerHTML = config.trainings.map((training) => {
     const count = schoolStaff.filter((person) => person.account && completed.has(`${person.account.id}|${training}`)).length;
     const percent = schoolStaff.length ? Math.round(count / schoolStaff.length * 100) : 0;
-    return `<article class="course-summary-card"><h3 title="${escapeHTML(training)}">${escapeHTML(training)}</h3><div class="course-summary-counts"><span><strong>${count}</strong>명 이수</span><span><strong>${schoolStaff.length - count}</strong>명 미이수</span></div><div class="course-summary-track" role="meter" aria-label="${escapeHTML(training)} 이수율" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${percent}"><span style="width:${percent}%"></span></div><small>이수율 ${percent}%</small></article>`;
+    return `<button class="course-summary-card" type="button" data-course-detail="${escapeHTML(training)}" aria-haspopup="dialog"><span class="course-card-title" title="${escapeHTML(training)}">${escapeHTML(training)}</span><span class="course-summary-counts"><span><strong>${count}</strong>명 이수</span><span><strong>${schoolStaff.length - count}</strong>명 미이수</span></span><span class="course-summary-track" role="meter" aria-label="${escapeHTML(training)} 이수율" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${percent}"><span style="width:${percent}%"></span></span><small>이수율 ${percent}%</small></button>`;
   }).join("");
+  $$('[data-course-detail]').forEach((button) => button.addEventListener("click", () => showCourseDetails(button.dataset.courseDetail)));
+}
+
+function showCourseDetails(training) {
+  const completed = completedKeys();
+  const schoolStaff = getSchoolStaff();
+  const done = schoolStaff.filter((person) => person.account && completed.has(`${person.account.id}|${training}`));
+  const pending = schoolStaff.filter((person) => !person.account || !completed.has(`${person.account.id}|${training}`));
+  $("#course-detail-title").textContent = training;
+  $("#course-completed-count").textContent = `${done.length}명`;
+  $("#course-pending-count").textContent = `${pending.length}명`;
+  $("#course-completed-names").innerHTML = done.length ? done.map((person) => `<li><strong>${escapeHTML(person.name)}</strong><small>${escapeHTML(person.department)}</small></li>`).join("") : '<li class="course-empty-name">아직 이수한 선생님이 없어요.</li>';
+  $("#course-pending-names").innerHTML = pending.length ? pending.map((person) => `<li><strong>${escapeHTML(person.name)}</strong><small>${escapeHTML(person.department)}${person.account ? "" : " · 가입 전"}</small></li>`).join("") : '<li class="course-empty-name">모든 선생님이 이수했어요.</li>';
+  $("#course-detail-modal").hidden = false;
+  $("#course-detail-close").focus();
 }
 
 function getSchoolStaff() {
@@ -663,6 +678,11 @@ $("#help-button").addEventListener("click", () => { $("#help-modal").hidden = fa
 $("#close-help").addEventListener("click", () => { $("#help-modal").hidden = true; });
 $("#help-done").addEventListener("click", () => { $("#help-modal").hidden = true; });
 $("#help-modal").addEventListener("click", (event) => { if (event.target.id === "help-modal") event.currentTarget.hidden = true; });
+function closeCourseDetails() { $("#course-detail-modal").hidden = true; }
+$("#course-detail-close").addEventListener("click", closeCourseDetails);
+$("#course-detail-done").addEventListener("click", closeCourseDetails);
+$("#course-detail-modal").addEventListener("click", (event) => { if (event.target.id === "course-detail-modal") closeCourseDetails(); });
+window.addEventListener("keydown", (event) => { if (event.key === "Escape" && !$("#course-detail-modal").hidden) closeCourseDetails(); });
 
 function renderStatusTable(completed, schoolStaff) {
   const trainings = config.trainings;

@@ -12,6 +12,7 @@
   <link rel="stylesheet" href="/styles-settings.css">
   <link rel="stylesheet" href="/styles-auth.css">
   <link rel="stylesheet" href="/styles-runtime.css">
+  <link rel="stylesheet" href="/styles-course-details.css">
 </head>
 <body>
   <div class="app-shell">
@@ -140,6 +141,7 @@
   </div>
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <div class="modal-backdrop" id="course-detail-modal" hidden><section class="help-modal course-detail-modal" role="dialog" aria-modal="true" aria-labelledby="course-detail-title"><button class="modal-close" id="course-detail-close" type="button" aria-label="닫기">×</button><p class="eyebrow">연수별 이수 현황</p><h2 id="course-detail-title"></h2><div class="course-detail-columns"><section class="course-detail-group"><h3><span class="status-pill complete">이수</span> <span id="course-completed-count"></span></h3><ul id="course-completed-names"></ul></section><section class="course-detail-group"><h3><span class="status-pill pending">미이수</span> <span id="course-pending-count"></span></h3><ul id="course-pending-names"></ul></section></div><button class="primary-button full-button" id="course-detail-done" type="button">닫기</button></section></div>
   <div class="modal-backdrop" id="settings-modal" hidden><section class="help-modal settings-modal" role="dialog" aria-modal="true" aria-labelledby="settings-title"><button class="modal-close" id="settings-close" type="button" aria-label="닫기">×</button><p class="eyebrow">학교 정보</p><h2 id="settings-title">우리 학교 연수 목록 설정</h2><p class="settings-lead">한 줄에 하나씩 입력하면 됩니다. 수정한 목록은 모든 승인된 계정에 적용돼요.</p><label for="school-input">학교 이름</label><input id="school-input" type="text"><label for="departments-input">부서 목록</label><textarea id="departments-input" rows="4"></textarea><label for="staff-input">교직원 목록 <small>부서, 이름</small></label><textarea id="staff-input" rows="7" placeholder="3학년부, 위지연"></textarea><label for="trainings-input">필수 원격연수 목록</label><textarea id="trainings-input" rows="7"></textarea><label for="onsite-trainings-input">학교현장연수 목록</label><textarea id="onsite-trainings-input" rows="5"></textarea><p class="modal-note">원격 필수 연수와 현장 참석 연수 목록은 각각 관리됩니다.</p><div class="settings-actions"><button class="outline-button" id="settings-cancel" type="button">취소</button><button class="primary-button" id="settings-save" type="button">목록 저장</button></div></section></div>
   <div class="modal-backdrop" id="help-modal" hidden><section class="help-modal" role="dialog" aria-modal="true" aria-labelledby="help-title"><button class="modal-close" id="close-help" type="button" aria-label="닫기">×</button><p class="eyebrow">도움말</p><h2 id="help-title">간편하게 연수를 등록하세요</h2><ol><li>학교 이메일로 로그인해 주세요.</li><li>원격연수는 PDF 이수증을, 현장연수는 서명을 등록해 주세요.</li><li>선생님은 본인 내역만, 관리자는 전체 현황과 제출 자료를 확인해요.</li></ol><p class="modal-note">자료는 로그인 권한이 적용되는 앱 서버의 SQLite DB와 파일 저장소에 보관됩니다.</p><button class="primary-button full-button" id="help-done" type="button">확인</button></section></div>
 

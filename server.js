@@ -34,6 +34,7 @@ const publicFiles = {
   "/styles-settings.css": "styles-settings.css",
   "/styles-auth.css": "styles-auth.css",
   "/styles-runtime.css": "styles-runtime.css",
+  "/styles-course-details.css": "styles-course-details.css",
   "/app.js": "app.js",
   "/training-matcher.js": "training-matcher.js",
   "/certificate-parser.js": "certificate-parser.js"
