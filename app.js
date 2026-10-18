@@ -424,11 +424,20 @@ function renderAdmin() {
   $("#file-count").textContent = records.length;
   $("#individual-count").textContent = records.reduce((count, record) => count + (record.individualTrainings?.length || 0), 0);
   $("#pending-count").textContent = users.filter((user) => user.status === "pending").length;
+  renderCourseOverview(schoolStaff, completed);
   renderStatusTable(completed, schoolStaff);
   renderOnsiteTable(schoolStaff);
   renderMaterials("#materials-list", records);
   renderIndividualTrainings();
   renderUsers();
+}
+
+function renderCourseOverview(schoolStaff, completed) {
+  $("#course-overview").innerHTML = config.trainings.map((training) => {
+    const count = schoolStaff.filter((person) => person.account && completed.has(`${person.account.id}|${training}`)).length;
+    const percent = schoolStaff.length ? Math.round(count / schoolStaff.length * 100) : 0;
+    return `<article class="course-summary-card"><h3 title="${escapeHTML(training)}">${escapeHTML(training)}</h3><div class="course-summary-counts"><span><strong>${count}</strong>명 이수</span><span><strong>${schoolStaff.length - count}</strong>명 미이수</span></div><div class="course-summary-track" role="meter" aria-label="${escapeHTML(training)} 이수율" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${percent}"><span style="width:${percent}%"></span></div><small>이수율 ${percent}%</small></article>`;
+  }).join("");
 }
 
 function getSchoolStaff() {
