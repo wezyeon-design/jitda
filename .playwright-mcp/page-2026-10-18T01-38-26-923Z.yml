@@ -1,0 +1,30 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - banner [ref=e3]:
+      - link "온결 홈" [ref=e4] [cursor=pointer]:
+        - /url: "#home"
+        - img [ref=e6]
+        - generic [ref=e9]:
+          - strong [ref=e10]: 온결
+          - generic [ref=e11]: 교원 연수 관리
+      - generic [ref=e12]:
+        - generic [ref=e13]: 우리 학교
+        - button "도움말 보기" [ref=e15] [cursor=pointer]:
+          - img [ref=e16]
+    - generic [ref=e20]:
+      - img [ref=e22]
+      - paragraph [ref=e25]: 안전한 시작
+      - heading "관리자 계정을 먼저 설정해 주세요" [level=1] [ref=e26]
+      - paragraph [ref=e27]: 연수 자료는 이 앱 서버의 데이터베이스와 파일 저장소에 보관됩니다. 관리자 계정이 준비되기 전에는 가입과 자료 열람을 잠가 둡니다.
+      - generic [ref=e28]:
+        - strong [ref=e29]: 최초 관리자 설정
+        - generic [ref=e30]:
+          - text: 프로젝트 터미널에서
+          - code [ref=e31]: npm run admin:create
+          - text: 를 실행해 관리자 이메일과 비밀번호를 등록해 주세요.
+      - paragraph [ref=e32]: 관리자 계정이 생성되면 다른 선생님은 가입 신청 후 관리자 승인을 받아 사용할 수 있어요.
+      - button "관리자 등록 후 다시 확인" [ref=e33] [cursor=pointer]
+    - contentinfo [ref=e34]:
+      - generic [ref=e35]: 온결 · 교원 연수 관리
+      - generic [ref=e36]: 선생님의 시간을 아끼는 간편한 연수 기록
+  - status

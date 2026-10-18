@@ -1,0 +1,86 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - banner [ref=e3]:
+      - link "온결 홈" [ref=e4] [cursor=pointer]:
+        - /url: "#home"
+        - img [ref=e6]
+        - generic [ref=e9]:
+          - strong [ref=e10]: 온결
+          - generic [ref=e11]: 교원 연수 관리
+      - generic [ref=e12]:
+        - generic [ref=e13]: 늘봄중학교
+        - button "도움말 보기" [ref=e15] [cursor=pointer]:
+          - img [ref=e16]
+    - main [ref=e19]:
+      - region "연수 확인, 한곳에서 간편하게." [ref=e20]:
+        - generic [ref=e21]:
+          - generic [ref=e22]:
+            - paragraph [ref=e23]: 2025학년도 교원 연수
+            - heading "연수 확인, 한곳에서 간편하게." [level=1] [ref=e25]
+            - paragraph [ref=e26]: 이수증 제출부터 현장 서명까지 필요한 연수를 차근차근 등록해 주세요.
+          - generic [ref=e34]: ✓
+        - region "전체 이수 현황" [ref=e35]:
+          - generic [ref=e36]:
+            - generic [ref=e37]:
+              - generic [ref=e38]: 우리 학교 이수 현황
+              - strong [ref=e39]: 0%
+            - paragraph [ref=e40]: 0건 이수 확인 · 전체 144건
+          - generic [ref=e42]:
+            - generic [ref=e43]: 아직 확인이 필요한 연수
+            - strong [ref=e44]: 144건
+        - generic [ref=e45]:
+          - generic [ref=e46]:
+            - paragraph [ref=e47]: START HERE
+            - heading "어떤 연수를 등록하시나요?" [level=2] [ref=e48]
+          - generic [ref=e49]: 간단하게 3단계
+        - generic [ref=e50]:
+          - generic [ref=e51]:
+            - generic [ref=e52]:
+              - generic [ref=e53]:
+                - generic [ref=e54]: "1"
+                - text: 부서 선택
+              - generic [ref=e55]:
+                - combobox "1 부서 선택" [ref=e56]:
+                  - option "부서를 선택해 주세요" [selected]
+                  - option "교무부"
+                  - option "연구부"
+                  - option "학생안전부"
+                  - option "교육과정부"
+                  - option "행정실"
+                - img
+            - generic [ref=e57]:
+              - generic [ref=e58]:
+                - generic [ref=e59]: "2"
+                - text: 이름 선택
+              - generic [ref=e60]:
+                - combobox "2 이름 선택" [disabled] [ref=e61]:
+                  - option "먼저 부서를 선택해 주세요" [selected]
+                - img
+          - generic [ref=e62]:
+            - generic [ref=e63]: "3"
+            - generic [ref=e64]: 연수 방법을 선택해 주세요
+          - generic [ref=e65]:
+            - button "원격연수 이수증 PDF를 제출해요" [disabled] [ref=e66]:
+              - img [ref=e68]
+              - generic [ref=e71]:
+                - strong [ref=e72]: 원격연수
+                - generic [ref=e73]: 이수증 PDF를 제출해요
+              - generic [ref=e74]: →
+            - button "학교현장연수 화면에 바로 서명해요" [disabled] [ref=e75]:
+              - img [ref=e77]
+              - generic [ref=e80]:
+                - strong [ref=e81]: 학교현장연수
+                - generic [ref=e82]: 화면에 바로 서명해요
+              - generic [ref=e83]: →
+          - paragraph [ref=e84]: 부서와 이름을 선택하면 연수를 등록할 수 있어요.
+        - generic [ref=e85]:
+          - generic [ref=e86]:
+            - img [ref=e88]
+            - generic [ref=e91]:
+              - strong [ref=e92]: 편리하고 안전하게
+              - generic [ref=e93]: 제출한 자료는 연수 관리 화면에서 확인할 수 있어요.
+          - button "관리자 화면" [ref=e94] [cursor=pointer]: 관리자 화면 →
+    - contentinfo [ref=e95]:
+      - generic [ref=e96]: 온결 · 교원 연수 관리
+      - generic [ref=e97]: 선생님의 시간을 아끼는 간편한 연수 기록
+  - status
