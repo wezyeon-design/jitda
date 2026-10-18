@@ -107,10 +107,10 @@ const INITIAL_DEPARTMENTS = STAFF_GROUPS.map(([department]) => department);
 const INITIAL_STAFF = STAFF_GROUPS.flatMap(([department, names]) => names.map((name) => ({ department, name })));
 const INITIAL_TRAININGS = [
   "교육활동 침해 예방교육", "교직원 인성교육", "학교폭력 예방교육", "선행교육 및 선행학습 예방교육",
-  "심폐소생술 및 응급처치", "부패방지·청렴교육", "청탁금지법 교육", "이해충돌방지 교육",
+  "부패방지·청렴교육", "청탁금지법 교육", "이해충돌방지 교육",
   "공무원 행동강령 교육", "긴급복지 신고의무자 교육", "아동학대 신고의무자 교육", "장애인학대 신고의무자 교육",
   "장애인식 개선교육", "직장 내 장애인식 개선교육", "자살예방 및 생명존중 교육", "감염병 예방교육",
-  "정보공개 교육", "개인정보 보호교육", "정보보안 교육", "인권교육"
+  "정보공개 교육", "인권교육"
 ];
 const INITIAL_ONSITE_TRAININGS = [
   "청렴연수 (부패방지·공직윤리 교육)",
@@ -159,6 +159,30 @@ const onsiteTrainingMigration = "jyeop-onsite-training-catalog-v1";
 if (!db.prepare("SELECT 1 FROM app_migrations WHERE name = ?").get(onsiteTrainingMigration)) {
   db.prepare("UPDATE school_config SET onsite_trainings_json = ? WHERE id = 1").run(JSON.stringify(INITIAL_ONSITE_TRAININGS));
   db.prepare("INSERT INTO app_migrations (name) VALUES (?)").run(onsiteTrainingMigration);
+}
+
+const remoteCourseRemovalMigration = "remove-onsite-duplicates-from-remote-v1";
+if (!db.prepare("SELECT 1 FROM app_migrations WHERE name = ?").get(remoteCourseRemovalMigration)) {
+  const removedCourses = new Set(["심폐소생술 및 응급처치", "개인정보 보호교육", "정보보안 교육"]);
+  const current = JSON.parse(db.prepare("SELECT trainings_json FROM school_config WHERE id = 1").get().trainings_json);
+  const trainings = current.filter((training) => !removedCourses.has(training));
+  const updateConfig = db.prepare("UPDATE school_config SET trainings_json = ? WHERE id = 1");
+  const updateRecord = db.prepare("UPDATE records SET training = ?, trainings_json = ?, individual_trainings_json = ? WHERE id = ?");
+  const migrate = db.transaction(() => {
+    updateConfig.run(JSON.stringify(trainings));
+    const remoteRecords = db.prepare("SELECT id, extracted_trainings_json, certificate_training_name FROM records WHERE method = '원격연수'").all();
+    for (const record of remoteRecords) {
+      const labels = JSON.parse(record.extracted_trainings_json || "[]");
+      if (!labels.length && record.certificate_training_name) labels.push(record.certificate_training_name);
+      const matched = matchTrainingLabels(labels, trainings);
+      const required = matched.map((item) => item.training);
+      const matchedSources = new Set(matched.flatMap((item) => item.sources));
+      const individual = labels.filter((label) => !matchedSources.has(label));
+      updateRecord.run(required[0] || "미분류 연수", JSON.stringify(required), JSON.stringify(individual), record.id);
+    }
+    db.prepare("INSERT INTO app_migrations (name) VALUES (?)").run(remoteCourseRemovalMigration);
+  });
+  migrate();
 }
 
 const recordCatalogMigration = "jyeop-record-training-catalog-v1";
